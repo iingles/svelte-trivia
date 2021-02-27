@@ -1,6 +1,6 @@
 <script>
+    import { writable } from 'svelte/store'
     import { questions, setToken } from './stores.js'
-
 
     const levels = [
         {id: 1, text: "Easy"},
@@ -24,27 +24,28 @@
     let selectedDifficulty, 
         selectedCategory
 
-    async function getQuestions() {  
+    if (selectedCategory === undefined || selectedDifficulty === undefined) {
+        selectedCategory = 9
+        selectedDifficulty = "easy"
+    }
+   
+
+    async function getQuestions() { 
         const tokenUrl = `https://opentdb.com/api_token.php?command=request`      
-        let token_value
         let getToken
-        let token
-        
-        const theToken = setToken.subscribe(val => {
-            token_value = val
-        })
+        let token   
 
-        if (token_value === '') {
+
+        if ($setToken === '') {
             getToken = await fetch(tokenUrl)
-            token = await getToken.json()
+            let t = await getToken.json()
+            
+            setToken.update(() => t.token)        
+        } 
 
-            setToken.update(() => token.token)
-        } else {
-            token = token_value
-        }
+        token = $setToken
 
         const url = `https://opentdb.com/api.php?amount=10&difficulty=${selectedDifficulty}&category=${selectedCategory}&token=${token}&type=multiple`
-        console.log(url)
        
         const response = await fetch(url)
 

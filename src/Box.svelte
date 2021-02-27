@@ -1,10 +1,11 @@
 <script>
     import Question from './Question.svelte'
-	import Answer from './Answer.svelte'
 
 	export let question
 	export let correctAnswer
 	export let incorrectAnswers
+
+	let current = ''
 
 	function shuffle(arr) {
 		// Fisher-Yates shuffle algorithm - https://github.com/coolaj86/knuth-shuffle
@@ -51,13 +52,52 @@
 		padding: 1em;
 		margin: 0 0 1em 0;
 	}
+
+	.answer {
+        display: flex;        
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    .answer:hover {
+        background: #f1f1f1;
+    }
+
+    .answer:active {
+        background: #ccc;
+    }
+
+    .answer h3 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .selected.i {
+        background: red;
+        color: #fff;
+    }
+
+    .selected.c {
+        background: green;
+        color: #fff;
+    }
 </style>
 
 <div class="box">
 	<Question question={question} />
 
 	{ #each answers as a }
-		<Answer answer={a.answer} type={a.type} />
+		<div 
+		class:selected="{current === a.answer}"
+		on:click="{() => current = a.answer}"
+		class={a.type + " " + 'answer'}
+		>
+			<h3>{a.answer}</h3>
+		</div>
 	{ /each }
 
 </div>

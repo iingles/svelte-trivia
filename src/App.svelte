@@ -19,7 +19,7 @@
 <main>
 	<h1>Isaac's Svelte Trivia App</h1>
 	<Options />
-	Question 1/10
+
 	<Score score="0/10" />
 
 	{#if typeof q === 'object'}
