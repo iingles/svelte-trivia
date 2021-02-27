@@ -1,5 +1,5 @@
 <script>
-	import { questions } from './stores.js'
+	import { questions, score } from './stores.js'
 
 	import Options from './Options.svelte'
 	import Box from './Box.svelte'
@@ -9,10 +9,11 @@
 
 	let qdata =  questions.subscribe(value => {
 		if (value !== undefined || value !== 'undefined' && typeof value === 'object') {			
-			q = value.results
+			q = $questions.results
 		}
 	})
 
+	let count = 0
 
 </script>
 
@@ -20,11 +21,11 @@
 	<h1>Isaac's Svelte Trivia App</h1>
 	<Options />
 
-	<Score score="0/10" />
+	<Score score={ $score.filter(el => el === true).length + "/10"} />
 
 	{#if typeof q === 'object'}
-		{ #each q as r }
-			<Box question={r.question} incorrectAnswers={r.incorrect_answers} correctAnswer={r.correct_answer}/>
+		{ #each q as {question, incorrect_answers, correct_answer}, idx (question)}			
+			<Box id={idx} boxValue={false} question={question} incorrectAnswers={incorrect_answers} correctAnswer={correct_answer}/>
 		{ /each }
 	{/if}
 

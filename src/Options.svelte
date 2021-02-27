@@ -1,5 +1,4 @@
 <script>
-    import { writable } from 'svelte/store'
     import { questions, setToken } from './stores.js'
 
     const levels = [
